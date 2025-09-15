@@ -81,6 +81,12 @@ jobs:
             image: google/cloud-sdk:latest
 
         steps:
+            - name: Install Docker
+              run: |
+                sudo apt-get update
+                sudo apt-get install -y docker.io
+                docker --version
+
             - name: Checkout Repository
               uses: actions/checkout@v2
 
