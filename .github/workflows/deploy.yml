@@ -21,14 +21,16 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
-      - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v1
+      - name: Set up GCP SDK and kubectl
+        uses: google-github-actions/setup-gcloud@v2
         with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+          install_kubectl: true
 
-      - name: Configure gcloud for Docker
+      - name: Configure Docker authentication
         run: |
-          gcloud config set project $PROJECT_ID
           gcloud auth configure-docker us-central1-docker.pkg.dev
 
       - name: Build and Push Docker Image
@@ -36,21 +38,9 @@ jobs:
           docker build -t $IMAGE:$GITHUB_SHA .
           docker push $IMAGE:$GITHUB_SHA
 
-      - name: Install kubectl
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y kubectl
-
-      - name: Configure GKE
-        env:
-          USE_GKE_GCLOUD_AUTH_PLUGIN: "True"
+      - name: Configure GKE credentials
         run: |
           gcloud container clusters get-credentials $GKE_CLUSTER --region $GKE_REGION --project $PROJECT_ID
-
-      # - name: Verify GKE plugin and kubectl
-      #   run: |
-      #     gke-gcloud-auth-plugin --version
-      #     kubectl version --client
 
       - name: Deploy to Kubernetes
         run: |
