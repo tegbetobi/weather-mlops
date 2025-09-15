@@ -2,4 +2,4 @@ venv/
 logs/
 MLOPS_PROJECT.egg-info/
 mlruns/
-artifacts/
+#artifacts/
