@@ -4,3 +4,4 @@ MLOPS_PROJECT.egg-info/
 mlruns/
 #artifacts/
 gcp-key.json
+.circleci/
