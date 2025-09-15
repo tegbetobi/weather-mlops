@@ -47,10 +47,10 @@ jobs:
         run: |
           gcloud container clusters get-credentials $GKE_CLUSTER --region $GKE_REGION --project $PROJECT_ID
 
-      - name: Verify GKE plugin and kubectl
-        run: |
-          gke-gcloud-auth-plugin --version
-          kubectl version --client
+      # - name: Verify GKE plugin and kubectl
+      #   run: |
+      #     gke-gcloud-auth-plugin --version
+      #     kubectl version --client
 
       - name: Deploy to Kubernetes
         run: |
