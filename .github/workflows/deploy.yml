@@ -26,7 +26,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_SA_KEY }}
 
-      - name: Configure gcloud
+      - name: Configure gcloud for Docker
         run: |
           gcloud config set project $PROJECT_ID
           gcloud auth configure-docker us-central1-docker.pkg.dev
@@ -35,11 +35,6 @@ jobs:
         run: |
           docker build -t $IMAGE:$GITHUB_SHA .
           docker push $IMAGE:$GITHUB_SHA
-
-      - name: Install gke-gcloud-auth-plugin
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
 
       - name: Configure GKE
         env:
@@ -99,10 +94,7 @@ jobs:
 #               run: |
 #                 gcloud container clusters get-credentials $GKE_CLUSTER --region $GKE_REGION --project $PROJECT_ID
 
-#             - name: Install gke-gcloud-auth-plugin
-#               run: |
-#                 sudo apt-get update -y
-#                 sudo apt-get install -y google-cloud-sdk-gke-gcloud-auth-plugin
+#            
 
 
 #             - name: Deploying to Kubernetes
